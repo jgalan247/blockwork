@@ -1,0 +1,4 @@
+[
+  { "name": "Guess the Number", "file": "guess-the-number.json", "description": "Random number game — variables, conditionals, random." },
+  { "name": "Shopping List", "file": "shopping-list.json", "description": "Add/clear items that persist — text, LocalStorage." }
+]

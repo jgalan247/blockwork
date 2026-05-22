@@ -43,9 +43,10 @@ on reload without fighting the offline cache.)
 
 ### Open an example
 
-The `examples/` folder has ready-made projects. In the editor click **Import**
-and choose `examples/guess-the-number.json` or `examples/shopping-list.json`,
-then press **Preview** to play.
+Click **Examples** in the toolbar and pick one (Guess the Number or Shopping
+List), then press **Preview** to play. You can also **Import** any
+`examples/*.json` file. To add your own example, drop a project JSON in
+`examples/` and list it in `examples/examples.json`.
 
 ## Host it on GitHub Pages
 

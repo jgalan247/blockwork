@@ -87,6 +87,55 @@ function importFromFile(file) {
   reader.readAsText(file);
 }
 
+/** Load one of the bundled examples by filename. */
+async function openExample(file) {
+  try {
+    const doc = await fetch(`examples/${file}`).then((r) => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json();
+    });
+    applyProject(doc);
+    devlog.info(`Opened example: ${doc.name}.`);
+  } catch (err) {
+    devlog.error(`Couldn't open example "${file}":`, err.message);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Examples dropdown                                                  */
+/* ------------------------------------------------------------------ */
+async function initExamplesMenu() {
+  const button = document.getElementById("btn-examples");
+  const list = document.getElementById("examples-list");
+  const close = () => { list.hidden = true; button.setAttribute("aria-expanded", "false"); };
+  const open = () => { list.hidden = false; button.setAttribute("aria-expanded", "true"); };
+
+  // Populate from the manifest so adding an example is a one-file edit.
+  try {
+    const examples = await fetch("examples/examples.json").then((r) => r.json());
+    list.replaceChildren(...examples.map((ex) => {
+      const li = document.createElement("li");
+      li.setAttribute("role", "none");
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.setAttribute("role", "menuitem");
+      btn.innerHTML = `${ex.name}<span class="menu-desc">${ex.description ?? ""}</span>`;
+      btn.addEventListener("click", () => { close(); openExample(ex.file); });
+      li.append(btn);
+      return li;
+    }));
+  } catch (err) {
+    devlog.warn("Couldn't load the examples list:", err.message);
+  }
+
+  button.addEventListener("click", (e) => {
+    e.stopPropagation();
+    list.hidden ? open() : close();
+  });
+  document.addEventListener("click", (e) => { if (!e.target.closest(".menu")) close(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+}
+
 /* ------------------------------------------------------------------ */
 /* Wiring                                                             */
 /* ------------------------------------------------------------------ */
@@ -135,6 +184,8 @@ export function initProject() {
     const file = fileInput.files?.[0];
     if (file) importFromFile(file);
   });
+
+  initExamplesMenu();
 
   // Best-effort: keep the latest state (including blocks) so a reload restores it.
   window.addEventListener("beforeunload", saveToLocal);
