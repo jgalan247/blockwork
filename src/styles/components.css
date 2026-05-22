@@ -1,0 +1,99 @@
+/*
+ * components.css — base appearance for Blockwork components.
+ *
+ * This stylesheet is shared by three places so a component looks identical
+ * everywhere:
+ *   1. the designer canvas (the static preview),
+ *   2. the live preview iframe (Milestone 5),
+ *   3. the exported PWA (Milestone 8).
+ *
+ * Components add their per-instance look (colours, sizes) as inline styles from
+ * their properties; this file only provides the sensible defaults that inline
+ * styles override. It must not depend on the editor theme (tokens.css) — these
+ * styles ship inside student apps.
+ */
+
+.bw-screen {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100%;
+  padding: 12px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  color: #111827;
+}
+.bw-screen[data-scrollable="false"] { overflow: hidden; }
+.bw-screen[data-scrollable="true"] { overflow: auto; }
+
+.bw-button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  margin: 4px 0;
+}
+.bw-button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.bw-label {
+  display: block;
+  margin: 4px 0;
+  white-space: pre-wrap; /* preserve line breaks set from blocks */
+}
+
+.bw-textbox {
+  font: inherit;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 4px 0;
+  padding: 8px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+}
+
+.bw-image { display: block; margin: 4px 0; max-width: 100%; object-fit: contain; }
+.bw-image-empty {
+  display: grid; place-items: center;
+  background: #f1f5f9; color: #94a3b8;
+  border: 1px dashed #cbd5e1; border-radius: 6px;
+  font: 13px system-ui, sans-serif;
+}
+
+/* Arrangements (layout containers) */
+.bw-arrange { display: flex; gap: 6px; margin: 4px 0; min-height: 24px; }
+.bw-harrange { flex-direction: row; }
+.bw-varrange { flex-direction: column; }
+
+/* Notifier overlays (alert / choice / toast) */
+.bw-notify-overlay {
+  position: absolute; inset: 0;
+  background: rgb(0 0 0 / 0.4);
+  display: grid; place-items: center;
+  z-index: 1000;
+}
+.bw-notify-card {
+  background: #fff; color: #111827;
+  border-radius: 12px; padding: 20px;
+  max-width: 80%; box-shadow: 0 10px 30px rgb(0 0 0 / 0.3);
+}
+.bw-notify-text { margin: 0 0 16px; }
+.bw-notify-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+.bw-notify-btn {
+  font: inherit; cursor: pointer;
+  border: none; border-radius: 6px;
+  padding: 8px 14px; background: #2563eb; color: #fff;
+}
+.bw-notify-toast {
+  position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%);
+  background: rgb(17 24 39 / 0.92); color: #fff;
+  padding: 10px 16px; border-radius: 999px; font-size: 14px;
+  z-index: 1000; max-width: 80%;
+}
+
+/* Component placeholder rendering in the designer when a render fails. */
+.bw-error {
+  border: 1px dashed #ef4444;
+  color: #ef4444;
+  padding: 4px 8px;
+  font: 12px/1.4 monospace;
+}

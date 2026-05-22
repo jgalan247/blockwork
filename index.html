@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blockwork — Build real phone apps from blocks</title>
+  <meta name="description" content="An open-source, App Inventor-style visual builder for installable web apps. Runs entirely in your browser." />
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- All paths are relative so this works on a GitHub Pages /<repo>/ subpath. -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="src/styles/tokens.css" />
+  <link rel="stylesheet" href="src/styles/editor.css" />
+  <!-- Component appearance, shared by the designer canvas, preview, and exports. -->
+  <link rel="stylesheet" href="src/styles/components.css" />
+
+  <!--
+    Blockly powers the block editor (Milestone 4). Loaded from a CDN for the
+    first run; the service worker caches it for offline use afterwards. To make
+    the editor fully offline-first from the very first load, vendor Blockly into
+    /vendor/blockly/ and point this tag there instead.
+  -->
+  <script src="https://unpkg.com/blockly@11/blockly.min.js" defer></script>
+</head>
+<body>
+  <div class="app">
+    <!-- ============================ Header ============================ -->
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-mark">▦ Blockwork</span>
+        <span class="brand-tagline">Build real phone apps from blocks</span>
+      </div>
+
+      <input
+        id="project-name"
+        class="project-name"
+        value="Untitled project"
+        aria-label="Project name"
+      />
+
+      <div class="view-toggle" role="group" aria-label="Editor view">
+        <button id="view-designer" type="button" aria-pressed="true">Designer</button>
+        <button id="view-blocks" type="button" aria-pressed="false">Blocks</button>
+      </div>
+
+      <nav class="toolbar" aria-label="Project actions">
+        <button id="btn-new" class="btn" type="button">New</button>
+        <button id="btn-save" class="btn" type="button" title="Save to this browser">Save</button>
+        <button id="btn-import" class="btn" type="button" title="Open a .json project file">Import</button>
+        <button id="btn-export-json" class="btn" type="button" title="Download project as JSON">Export</button>
+        <button id="btn-export" class="btn" type="button" title="Download an installable PWA">Export PWA</button>
+        <button id="btn-preview" class="btn btn-primary" type="button">▶ Preview</button>
+      </nav>
+    </header>
+
+    <!-- ========================== Work area ========================== -->
+    <main class="app-main">
+      <!-- Palette: draggable component sources (filled by designer.js) -->
+      <aside class="panel" aria-label="Component palette">
+        <div class="panel-title">Palette</div>
+        <div id="palette" class="panel-body"></div>
+      </aside>
+
+      <!-- Center: the Designer canvas and the Blocks workspace (one shown at a time) -->
+      <section class="workarea">
+        <div id="designer-view" class="view">
+          <div class="phone-frame">
+            <div id="phone-screen" class="phone-screen"></div>
+          </div>
+        </div>
+        <div id="blocks-view" class="view" hidden>
+          <div id="blockly-div"></div>
+        </div>
+      </section>
+
+      <!-- Right: component tree + properties inspector -->
+      <aside class="panel">
+        <div class="panel-title">Components</div>
+        <div class="panel-body" style="flex: 0 0 auto; max-height: 40%;">
+          <ul id="component-tree" class="tree" role="tree" aria-label="Component tree"></ul>
+        </div>
+        <div class="panel-title">Properties</div>
+        <div id="inspector" class="panel-body"></div>
+      </aside>
+    </main>
+
+    <!-- ========================= Dev console ========================= -->
+    <!--
+      No silent failures: errors from the editor, generated code, and preview
+      surface here so a teacher can see what went wrong without opening devtools.
+    -->
+    <section class="console" data-collapsed="true" aria-label="Developer console">
+      <div class="console-header" id="console-toggle" role="button" tabindex="0" aria-expanded="false">
+        <span>▸ Console</span>
+        <span class="badge" id="console-count">0</span>
+      </div>
+      <pre class="console-log" id="console-log" aria-live="polite"></pre>
+    </section>
+  </div>
+
+  <!-- ========================= Preview modal ======================== -->
+  <div class="preview-overlay" id="preview-overlay" hidden role="dialog" aria-modal="true" aria-label="App preview">
+    <div class="preview-card">
+      <header>
+        <h2>Preview</h2>
+        <button id="preview-close" class="btn close" type="button">Close ✕</button>
+      </header>
+      <!--
+        SECURITY: the preview runs untrusted, student-generated code. It is
+        sandboxed to scripts only — no same-origin access, no top navigation,
+        no form submission, no popups. tabindex keeps it keyboard-reachable.
+      -->
+      <iframe
+        id="preview-frame"
+        class="preview-frame"
+        title="App preview"
+        sandbox="allow-scripts"
+        tabindex="0"
+      ></iframe>
+    </div>
+  </div>
+
+  <!-- Hidden file input used by Open / Import. -->
+  <input type="file" id="file-input" accept="application/json,.json,.blockwork" class="visually-hidden" />
+
+  <script type="module" src="src/editor/main.js"></script>
+</body>
+</html>

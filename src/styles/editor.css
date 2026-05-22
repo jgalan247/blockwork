@@ -1,0 +1,276 @@
+/*
+ * editor.css — layout and chrome for the Blockwork IDE.
+ *
+ * The editor is a CSS grid: a header bar on top, a three-column work area in
+ * the middle (palette · canvas · inspector), and a collapsible dev console at
+ * the bottom. Component preview rendering lives inside the canvas; the runtime
+ * preview opens as a modal overlay.
+ *
+ * Colours/spacing come from tokens.css — avoid hard-coded values here.
+ */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  font-size: 14px;
+}
+
+/* Visible focus everywhere — the whole editor must be keyboard-navigable. */
+:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 1px;
+  border-radius: var(--radius-sm);
+}
+
+/* ------------------------------------------------------------------ */
+/* App shell grid                                                      */
+/* ------------------------------------------------------------------ */
+.app {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-weight: 700;
+}
+.brand .brand-mark { color: var(--color-accent); font-size: 1.1rem; }
+.brand .brand-tagline {
+  color: var(--color-muted);
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+
+.project-name {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--color-text);
+  font: inherit;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+}
+.project-name:hover { border-color: var(--color-border); }
+.project-name:focus { border-color: var(--color-accent); }
+
+.toolbar { display: flex; gap: var(--space-2); align-items: center; }
+
+/* ------------------------------------------------------------------ */
+/* Buttons (shared)                                                    */
+/* ------------------------------------------------------------------ */
+.btn {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.btn:hover { border-color: var(--color-accent); }
+.btn-primary { background: var(--color-accent); border-color: var(--color-accent); }
+.btn-primary:hover { background: var(--color-accent-hover); border-color: var(--color-accent-hover); }
+.btn-danger:hover { border-color: var(--color-danger); color: var(--color-danger-hover); }
+
+/* A segmented toggle for switching Designer / Blocks views. */
+.view-toggle { display: inline-flex; border: 1px solid var(--color-border); border-radius: var(--radius-sm); overflow: hidden; }
+.view-toggle button {
+  font: inherit; cursor: pointer; border: 0; background: transparent;
+  color: var(--color-muted); padding: var(--space-2) var(--space-3);
+}
+.view-toggle button[aria-pressed="true"] { background: var(--color-accent); color: #fff; }
+
+/* ------------------------------------------------------------------ */
+/* Work area: palette · canvas · inspector                            */
+/* ------------------------------------------------------------------ */
+.app-main {
+  display: grid;
+  grid-template-columns: 200px 1fr 280px;
+  min-height: 0; /* let children scroll instead of blowing out the grid */
+}
+
+.panel {
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.panel:last-child { border-right: 0; border-left: 1px solid var(--color-border); }
+
+.panel-title {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+  padding: var(--space-3) var(--space-3) var(--space-2);
+}
+
+.panel-body { overflow: auto; padding: 0 var(--space-2) var(--space-3); flex: 1; min-height: 0; }
+
+/* Palette items (draggable component sources) */
+.palette-item {
+  display: flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  cursor: grab;
+  user-select: none;
+  /* Palette items are <button>s (keyboard-addable); reset the button look. */
+  width: 100%; border: 0; background: transparent; color: inherit;
+  font: inherit; text-align: left;
+}
+.palette-item:hover { background: var(--color-surface-2); }
+.palette-item .icon { font-size: 1.1rem; }
+.palette-category { font-size: 0.7rem; color: var(--color-muted); margin: var(--space-3) var(--space-2) var(--space-1); text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* ------------------------------------------------------------------ */
+/* Canvas (center)                                                     */
+/* ------------------------------------------------------------------ */
+.workarea {
+  position: relative;
+  background: var(--color-bg);
+  overflow: auto;
+  display: grid;
+  place-items: center;
+  padding: var(--space-6);
+}
+
+/* Only one view is shown at a time; `hidden` attr toggles them. */
+.view[hidden] { display: none; }
+
+/* Phone frame for the designer preview. */
+.phone-frame {
+  width: 320px;
+  height: 600px;
+  background: #fff;
+  color: #111;
+  border-radius: 28px;
+  border: 10px solid #0b1220;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  position: relative;
+}
+.phone-screen { width: 100%; height: 100%; overflow: auto; }
+
+/* Blockly mounts here and fills the work area. */
+#blockly-div { position: absolute; inset: 0; }
+
+/* Editor-only overlays on rendered components. These are NOT in components.css
+   because they must never ship inside an exported app. */
+.bw-selected { outline: 2px solid var(--color-accent) !important; outline-offset: 1px; }
+.phone-screen [data-bw-id] { cursor: pointer; }
+.bw-drop-active { box-shadow: inset 0 0 0 2px var(--color-accent-2); }
+/* Give empty containers a visible drop target. */
+[data-bw-slot]:empty::after {
+  content: "Drop components here";
+  display: block; color: #9aa4b2; font: 13px var(--font-ui);
+  text-align: center; padding: var(--space-6) var(--space-2);
+}
+
+/* Component tree (right, top) */
+.tree { list-style: none; margin: 0; padding: 0; }
+.tree li { padding: var(--space-1) var(--space-2); border-radius: var(--radius-sm); cursor: pointer; }
+.tree li[aria-selected="true"] { background: var(--color-accent); color: #fff; }
+.tree li:hover { background: var(--color-surface-2); }
+.tree .depth-1 { padding-left: var(--space-4); }
+.tree .depth-2 { padding-left: var(--space-6); }
+
+/* Properties inspector */
+.inspector-head { padding: var(--space-2); display: flex; align-items: center; gap: var(--space-2); }
+.inspector-head .name { font-weight: 600; }
+.inspector-head .type { color: var(--color-muted); font-size: 0.8rem; }
+.inspector-head .btn { margin-left: auto; padding: var(--space-1) var(--space-2); }
+.inspector-empty { padding: var(--space-3) var(--space-2); color: var(--color-muted); }
+.inspector-help { padding: 0 var(--space-2) var(--space-2); color: var(--color-muted); font-size: 0.78rem; }
+
+/* Properties inspector rows */
+.prop-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); align-items: center; padding: var(--space-1) var(--space-2); }
+.prop-row label { color: var(--color-muted); font-size: 0.8rem; }
+.prop-row input, .prop-row select {
+  font: inherit; width: 100%;
+  background: var(--color-bg); color: var(--color-text);
+  border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-2);
+}
+.prop-row input[type="color"] { padding: 0; height: 28px; }
+
+/* ------------------------------------------------------------------ */
+/* Dev console (bottom)                                                */
+/* ------------------------------------------------------------------ */
+.console {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  max-height: 30vh;
+  display: flex;
+  flex-direction: column;
+}
+.console-header {
+  display: flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+.console-header .badge {
+  margin-left: auto; background: var(--color-surface-2);
+  border-radius: 999px; padding: 0 var(--space-2); font-size: 0.7rem;
+}
+.console-log {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  overflow: auto;
+  padding: var(--space-2) var(--space-3);
+  margin: 0;
+}
+.console[data-collapsed="true"] .console-log { display: none; }
+.log-line { white-space: pre-wrap; }
+.log-line.error { color: var(--color-danger-hover); }
+.log-line.warn { color: #fbbf24; }
+.log-line .time { color: var(--color-muted); margin-right: var(--space-2); }
+
+/* ------------------------------------------------------------------ */
+/* Preview modal                                                       */
+/* ------------------------------------------------------------------ */
+.preview-overlay {
+  position: fixed; inset: 0;
+  background: rgb(0 0 0 / 0.6);
+  display: grid; place-items: center;
+  z-index: 50;
+}
+.preview-overlay[hidden] { display: none; }
+.preview-card { background: var(--color-surface); border-radius: var(--radius); padding: var(--space-4); box-shadow: var(--shadow); }
+.preview-card header { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3); }
+.preview-card header h2 { margin: 0; font-size: 1rem; }
+.preview-card .close { margin-left: auto; }
+.preview-frame {
+  width: 320px; height: 600px;
+  border: 10px solid #0b1220; border-radius: 28px;
+  background: #fff;
+}
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}

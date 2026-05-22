@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blockwork — Component model tests</title>
+  <style>
+    body { font: 15px/1.5 system-ui, sans-serif; background: #0f172a; color: #f1f5f9; max-width: 760px; margin: 2rem auto; padding: 0 1rem; }
+    h1 { font-size: 1.2rem; }
+    #summary { font-weight: 700; padding: 0.4rem 0.8rem; border-radius: 6px; display: inline-block; }
+    .pass { color: #34d399; }
+    .fail { color: #f87171; }
+    #summary.pass { background: rgba(52, 211, 153, 0.15); }
+    #summary.fail { background: rgba(248, 113, 113, 0.15); }
+    ul { list-style: none; padding: 0; }
+    li { padding: 0.25rem 0; border-bottom: 1px solid #1e293b; }
+    small { color: #94a3b8; font-family: monospace; }
+  </style>
+</head>
+<body>
+  <h1>Component model stress test</h1>
+  <p>Proves the schema, the Screen/Button/Label components, and the registry.</p>
+  <p id="summary">running…</p>
+  <ul id="results"></ul>
+  <script type="module" src="run-tests.js"></script>
+</body>
+</html>

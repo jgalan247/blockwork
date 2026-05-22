@@ -1,0 +1,16 @@
+# Blockwork has no build step for end users — there is little to ignore.
+# These entries only matter if a contributor opts into the optional dev tooling.
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Optional dev dependencies (Vite etc.) — never required to run or deploy.
+node_modules/
+dist/
+
+# Logs
+*.log

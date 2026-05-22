@@ -1,0 +1,64 @@
+{
+  "name": "Guess the Number",
+  "version": "1.0",
+  "createdWith": "Blockwork v0.1",
+  "screens": [
+    {
+      "name": "Screen1",
+      "properties": {
+        "BackgroundColor": "#eef2ff",
+        "Title": "Guess the Number",
+        "ScrollableContent": true
+      },
+      "components": [
+        {
+          "id": "comp_1",
+          "name": "Label1",
+          "type": "Label",
+          "properties": {
+            "Text": "I picked a number from 1 to 10. Can you guess it?",
+            "TextColor": "#111827",
+            "FontSize": 16,
+            "FontBold": true
+          }
+        },
+        {
+          "id": "comp_2",
+          "name": "TextBox1",
+          "type": "TextBox",
+          "properties": {
+            "Hint": "Your guess",
+            "Text": "",
+            "MultiLine": false
+          }
+        },
+        {
+          "id": "comp_3",
+          "name": "Button1",
+          "type": "Button",
+          "properties": {
+            "Text": "Check my guess",
+            "BackgroundColor": "#2563eb",
+            "TextColor": "#ffffff",
+            "Enabled": true,
+            "Width": "auto",
+            "Height": "auto"
+          }
+        },
+        {
+          "id": "comp_4",
+          "name": "Label2",
+          "type": "Label",
+          "properties": {
+            "Text": "",
+            "TextColor": "#111827",
+            "FontSize": 16,
+            "FontBold": false
+          }
+        }
+      ]
+    }
+  ],
+  "blocks": "<xml xmlns=\"https://developers.google.com/blockly/xml\"><variables><variable id=\"|*!NuH$gJR(g8L#%mHM/\">secret</variable></variables><block type=\"variables_set\" id=\"t6Nhyv(?y?~|/P)=GM7R\" x=\"0\" y=\"0\"><field name=\"VAR\" id=\"|*!NuH$gJR(g8L#%mHM/\">secret</field><value name=\"VALUE\"><block type=\"math_random_int\" id=\"_B/;.^7cfp5mFJp#0;kO\"><value name=\"FROM\"><block type=\"math_number\" id=\"w9(32dkErhG|2oqQ3a.m\"><field name=\"NUM\">1</field></block></value><value name=\"TO\"><block type=\"math_number\" id=\"t+RBc9c8;ySYMcM]W0tC\"><field name=\"NUM\">10</field></block></value></block></value></block><block type=\"bw_Button_event_Click\" id=\"]N%70sxM+F9P?KM,RKb/\" x=\"0\" y=\"0\"><field name=\"INSTANCE\">Button1</field><statement name=\"DO\"><block type=\"controls_if\" id=\"s3rn9,o@-;FJ^;CPYMj`\"><value name=\"IF0\"><block type=\"logic_compare\" id=\"[cK+=khB3+6A6wmF6hy;\"><field name=\"OP\">EQ</field><value name=\"A\"><block type=\"bw_TextBox_get_Text\" id=\"KHpyVM-Qf.=-5h62yZ%i\"><field name=\"INSTANCE\">TextBox1</field></block></value><value name=\"B\"><block type=\"variables_get\" id=\"1f!1ZQKY_[ILgs*PmyCK\"><field name=\"VAR\" id=\"|*!NuH$gJR(g8L#%mHM/\">secret</field></block></value></block></value><statement name=\"DO0\"><block type=\"bw_Label_set_Text\" id=\"}?cj/|R|*{e(efc4)plq\"><field name=\"INSTANCE\">Label2</field><value name=\"VALUE\"><block type=\"text\" id=\"Su@(K:PGjZTs^npt*(|-\"><field name=\"TEXT\">Correct! 🎉</field></block></value></block></statement><next><block type=\"controls_if\" id=\"HI9Zuc]l]$WrS]tfs./h\"><value name=\"IF0\"><block type=\"logic_compare\" id=\"e2WcAK.{_JwS1w/)*IRx\"><field name=\"OP\">LT</field><value name=\"A\"><block type=\"bw_TextBox_get_Text\" id=\"1nSU$w]p02*RuVQCCP=[\"><field name=\"INSTANCE\">TextBox1</field></block></value><value name=\"B\"><block type=\"variables_get\" id=\"JOj#);KXb+$1_P#@F.q.\"><field name=\"VAR\" id=\"|*!NuH$gJR(g8L#%mHM/\">secret</field></block></value></block></value><statement name=\"DO0\"><block type=\"bw_Label_set_Text\" id=\"FLcCRzBZwb~)?seE}X_)\"><field name=\"INSTANCE\">Label2</field><value name=\"VALUE\"><block type=\"text\" id=\"Hg3^h/euZc]SF@%t$![a\"><field name=\"TEXT\">Too low — try higher ⬆️</field></block></value></block></statement><next><block type=\"controls_if\" id=\"#lEOTotab1!B0JRf!=q3\"><value name=\"IF0\"><block type=\"logic_compare\" id=\"t)Ac8He;S.Qb3|!otqc8\"><field name=\"OP\">GT</field><value name=\"A\"><block type=\"bw_TextBox_get_Text\" id=\"DeXati78%+Mh4{6NSNn|\"><field name=\"INSTANCE\">TextBox1</field></block></value><value name=\"B\"><block type=\"variables_get\" id=\")4NU0Qqh7~s9p=FM=T/Y\"><field name=\"VAR\" id=\"|*!NuH$gJR(g8L#%mHM/\">secret</field></block></value></block></value><statement name=\"DO0\"><block type=\"bw_Label_set_Text\" id=\"QxOw.TIY7Dq?hQK2REu6\"><field name=\"INSTANCE\">Label2</field><value name=\"VALUE\"><block type=\"text\" id=\"4Qmyx)V67=gIiteSFBf?\"><field name=\"TEXT\">Too high — try lower ⬇️</field></block></value></block></statement></block></next></block></next></block></statement></block></xml>",
+  "assets": {}
+}

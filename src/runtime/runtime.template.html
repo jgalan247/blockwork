@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!--
+  runtime.template.html — the HTML shell for an EXPORTED app.
+
+  The exporter (src/exporter/bundle.js, Milestone 8) reads this file and replaces
+  the {{TOKENS}} below, then writes it out as the app's index.html alongside
+  app.js (the bundled runtime + components + project + block code), manifest.json,
+  service-worker.js, and the icons. Component CSS is inlined here so an export
+  is just those few files.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{{NAME}}</title>
+  <meta name="theme-color" content="{{THEME_COLOR}}" />
+  <meta name="description" content="{{NAME}} — made with Blockwork." />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon-192.png" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <style>
+    html, body { margin: 0; height: 100%; }
+    #app { min-height: 100%; }
+    {{STYLES}}
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- The whole app: runtime + components + project data + your blocks. -->
+  <script src="app.js"></script>
+
+  <!-- Cache-first offline support: an exported app's code never changes. -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js").catch(function () {});
+    }
+  </script>
+</body>
+</html>

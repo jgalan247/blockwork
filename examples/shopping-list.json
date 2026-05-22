@@ -1,0 +1,83 @@
+{
+  "name": "Shopping List",
+  "version": "1.0",
+  "createdWith": "Blockwork v0.1",
+  "screens": [
+    {
+      "name": "Screen1",
+      "properties": {
+        "BackgroundColor": "#f0fdf4",
+        "Title": "Shopping List",
+        "ScrollableContent": true
+      },
+      "components": [
+        {
+          "id": "comp_1",
+          "name": "Label1",
+          "type": "Label",
+          "properties": {
+            "Text": "🛒 Shopping List",
+            "TextColor": "#111827",
+            "FontSize": 20,
+            "FontBold": true
+          }
+        },
+        {
+          "id": "comp_2",
+          "name": "TextBox1",
+          "type": "TextBox",
+          "properties": {
+            "Hint": "Add an item",
+            "Text": "",
+            "MultiLine": false
+          }
+        },
+        {
+          "id": "comp_3",
+          "name": "Button1",
+          "type": "Button",
+          "properties": {
+            "Text": "Add",
+            "BackgroundColor": "#16a34a",
+            "TextColor": "#ffffff",
+            "Enabled": true,
+            "Width": "auto",
+            "Height": "auto"
+          }
+        },
+        {
+          "id": "comp_4",
+          "name": "Button2",
+          "type": "Button",
+          "properties": {
+            "Text": "Clear all",
+            "BackgroundColor": "#ef4444",
+            "TextColor": "#ffffff",
+            "Enabled": true,
+            "Width": "auto",
+            "Height": "auto"
+          }
+        },
+        {
+          "id": "comp_5",
+          "name": "Label2",
+          "type": "Label",
+          "properties": {
+            "Text": "",
+            "TextColor": "#111827",
+            "FontSize": 16,
+            "FontBold": false
+          }
+        },
+        {
+          "id": "comp_6",
+          "name": "LocalStorage1",
+          "type": "LocalStorage",
+          "properties": {}
+        }
+      ]
+    }
+  ],
+  "blocks": "<xml xmlns=\"https://developers.google.com/blockly/xml\"><variables><variable id=\"a|FyVC5Rv3Eo~;7~_?EA\">list</variable></variables><block type=\"bw_Button_event_Click\" id=\"1.XKOw20qWaPOSZEr#3_\" x=\"29\" y=\"-30\"><field name=\"INSTANCE\">Button1</field><statement name=\"DO\"><block type=\"variables_set\" id=\"gugN(p4P#3+]Zq1j1ooa\"><field name=\"VAR\" id=\"a|FyVC5Rv3Eo~;7~_?EA\">list</field><value name=\"VALUE\"><block type=\"text_join\" id=\"3|Bk05$=3#ewJq5!zh)n\"><mutation items=\"2\"></mutation><value name=\"ADD0\"><block type=\"variables_get\" id=\"$iVX=Os*r7j+T%jDIa$q\"><field name=\"VAR\" id=\"a|FyVC5Rv3Eo~;7~_?EA\">list</field></block></value><value name=\"ADD1\"><block type=\"text_join\" id=\"[uPh|(3+QK7Ri]?X:.MU\"><mutation items=\"2\"></mutation><value name=\"ADD0\"><block type=\"text_join\" id=\"[*|]5eQm$-uv|-FJjdfQ\"><mutation items=\"2\"></mutation><value name=\"ADD0\"><block type=\"text\" id=\"{/;/Kh]7V2jNMv-:D/}o\"><field name=\"TEXT\">• </field></block></value><value name=\"ADD1\"><block type=\"bw_TextBox_get_Text\" id=\"Lb|4e4zHY5DkEY.yO?Q_\"><field name=\"INSTANCE\">TextBox1</field></block></value></block></value><value name=\"ADD1\"><block type=\"text\" id=\"MjrjRMo)3+BM_)fL,Neh\"><field name=\"TEXT\">\n</field></block></value></block></value></block></value><next><block type=\"bw_Label_set_Text\" id=\"baEvG7~PftXe~|JN9NbO\"><field name=\"INSTANCE\">Label2</field><value name=\"VALUE\"><block type=\"variables_get\" id=\"=?g[RERCE|hULgpbgWzQ\"><field name=\"VAR\" id=\"a|FyVC5Rv3Eo~;7~_?EA\">list</field></block></value><next><block type=\"bw_LocalStorage_call_StoreValue\" id=\"idvD-gvG3a9)Db/5(QG~\"><field name=\"INSTANCE\">LocalStorage1</field><value name=\"ARG0\"><block type=\"text\" id=\"6RE:Ru1UwUpFYIDro/v,\"><field name=\"TEXT\">list</field></block></value><value name=\"ARG1\"><block type=\"variables_get\" id=\"#~2k_%Hyr)Y7P4*zRNjQ\"><field name=\"VAR\" id=\"a|FyVC5Rv3Eo~;7~_?EA\">list</field></block></value><next><block type=\"bw_TextBox_set_Text\" id=\"uM8u@)io:i;Sj^+l0Ons\"><field name=\"INSTANCE\">TextBox1</field><value name=\"VALUE\"><block type=\"text\" id=\"^Wh~8=)FeI5GbX#b|xA}\"><field name=\"TEXT\"></field></block></value></block></next></block></next></block></next></block></statement></block><block type=\"bw_Button_event_Click\" id=\"#8RDWM*m{gO$i|A94NHP\" x=\"0\" y=\"0\"><field name=\"INSTANCE\">Button2</field><statement name=\"DO\"><block type=\"variables_set\" id=\"qHgLtI`xbO-RFz6nmQ0`\"><field name=\"VAR\" id=\"a|FyVC5Rv3Eo~;7~_?EA\">list</field><value name=\"VALUE\"><block type=\"text\" id=\"@%=3TOl]NV94XE0ia01g\"><field name=\"TEXT\"></field></block></value><next><block type=\"bw_Label_set_Text\" id=\"uff,^Zx|PT?;b:f7XIRF\"><field name=\"INSTANCE\">Label2</field><value name=\"VALUE\"><block type=\"text\" id=\"?t,nN$dPQx3Dbq*Rt8*F\"><field name=\"TEXT\"></field></block></value><next><block type=\"bw_LocalStorage_call_StoreValue\" id=\"$740qYsl;~zGae:oDRZ6\"><field name=\"INSTANCE\">LocalStorage1</field><value name=\"ARG0\"><block type=\"text\" id=\"+o}SzCW+hIe{MR7)`_8`\"><field name=\"TEXT\">list</field></block></value><value name=\"ARG1\"><block type=\"text\" id=\"ro^+ux5(ykzR]x;c4,la\"><field name=\"TEXT\"></field></block></value></block></next></block></next></block></statement></block><block type=\"bw_Label_set_Text\" id=\")2J$C1`3lltW*E9M%`YG\" x=\"73\" y=\"78\"><field name=\"INSTANCE\">Label2</field><value name=\"VALUE\"><block type=\"variables_get\" id=\"3%o)cl6{QMm#wiPyv8Qp\"><field name=\"VAR\" id=\"a|FyVC5Rv3Eo~;7~_?EA\">list</field></block></value></block><block type=\"variables_set\" id=\"=~)O-aMk/!:tSZRHes.F\" x=\"72\" y=\"81\"><field name=\"VAR\" id=\"a|FyVC5Rv3Eo~;7~_?EA\">list</field><value name=\"VALUE\"><block type=\"bw_LocalStorage_call_GetValue\" id=\".;Bh_K5*j4n)rXCc_@iU\"><field name=\"INSTANCE\">LocalStorage1</field><value name=\"ARG0\"><block type=\"text\" id=\"wq(M,z6qwrPH}4`sB,,`\"><field name=\"TEXT\">list</field></block></value><value name=\"ARG1\"><block type=\"text\" id=\"`XkhYSQ,|4Qps|$r7*vh\"><field name=\"TEXT\"></field></block></value></block></value></block></xml>",
+  "assets": {}
+}
