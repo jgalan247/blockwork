@@ -85,11 +85,44 @@ test("validation catches a broken component", () => {
 test("registry built without errors", () => {
   assert(registryErrors.length === 0, registryErrors.join(" | "));
 });
-test("registry indexes all MVP components", () => {
-  eq(allComponents().length, 9);
+test("registry indexes all components", () => {
+  eq(allComponents().length, 12); // 9 MVP + 3 sensors
   eq(visibleComponents().length, 7); // Screen, Button, Label, TextBox, Image, H, V
   assert(getComponent("Button") === Button, "getComponent returns Button");
   assert(components.has("Notifier") && components.has("LocalStorage"), "has non-visible components");
+});
+
+test("sensors are non-visible with read-only readings", () => {
+  for (const name of ["Geolocation", "Camera", "Accelerometer"]) {
+    const def = getComponent(name);
+    assert(def, `${name} registered`);
+    eq(def.visible, false);
+    eq(def.runtime.create("x", {}), null);
+    // Every property is a read-only reading (editable: false → getter-only block).
+    for (const spec of Object.values(def.properties)) eq(spec.editable, false);
+  }
+});
+
+test("Geolocation.RequestLocation updates readings and fires LocationChanged", () => {
+  const Geo = getComponent("Geolocation");
+  // Stub the browser geolocation API.
+  const original = navigator.geolocation;
+  Object.defineProperty(navigator, "geolocation", {
+    value: { getCurrentPosition: (ok) => ok({ coords: { latitude: 51.5, longitude: -0.12, accuracy: 8 } }) },
+    configurable: true,
+  });
+  const props = {};
+  let fired = null;
+  const ctx = {
+    id: "Geolocation1",
+    app: { set: (_id, prop, val) => { props[prop] = val; } },
+    dispatch: (e) => { fired = e; },
+  };
+  Geo.methods.RequestLocation.run(null, [], ctx);
+  Object.defineProperty(navigator, "geolocation", { value: original, configurable: true });
+  eq(props.Latitude, 51.5);
+  eq(props.Longitude, -0.12);
+  eq(fired, "LocationChanged");
 });
 test("registry groups by category", () => {
   const groups = componentsByCategory();

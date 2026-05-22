@@ -102,9 +102,10 @@ vendor/                 jszip.min.js (Blockly loads from CDN by default)
 ## MVP scope
 
 **Components:** Screen, Button, Label, TextBox, Image, Horizontal/Vertical
-Arrangement, LocalStorage, Notifier.
+Arrangement, LocalStorage, Notifier, plus sensors (Geolocation, Camera,
+Accelerometer).
 **Blocks:** Blockly standard categories + auto-generated per-component blocks.
-**Not in MVP:** sensors, networking, canvas, audio, multi-screen, accounts.
+**Not yet:** networking, canvas, audio, multi-screen, accounts.
 
 ### Milestones
 

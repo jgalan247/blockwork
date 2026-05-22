@@ -148,7 +148,7 @@ function componentCategories() {
 }
 
 function catColour(category) {
-  return { UI: "230", Layout: "200", Storage: "160", Media: "20" }[category] ?? "120";
+  return { UI: "230", Layout: "200", Storage: "160", Media: "20", Sensors: "30" }[category] ?? "120";
 }
 
 function blockworkTheme(Blockly) {

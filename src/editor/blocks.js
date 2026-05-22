@@ -23,7 +23,7 @@ const q = (s) => JSON.stringify(s);
 
 /** Blockly hue per palette category, so related blocks share a colour. */
 function categoryColour(category) {
-  return { UI: "230", Layout: "200", Storage: "160", Media: "20" }[category] ?? "120";
+  return { UI: "230", Layout: "200", Storage: "160", Media: "20", Sensors: "30" }[category] ?? "120";
 }
 
 /** A sensible literal to use when a setter/argument input is left empty. */
@@ -59,8 +59,9 @@ export function blockTypesFor(def) {
   const t = def.name;
   const ids = [];
   for (const ev of Object.keys(def.events ?? {})) ids.push(`bw_${t}_event_${ev}`);
-  for (const prop of Object.keys(def.properties ?? {})) {
-    ids.push(`bw_${t}_set_${prop}`, `bw_${t}_get_${prop}`);
+  for (const [prop, spec] of Object.entries(def.properties ?? {})) {
+    if (spec.editable !== false) ids.push(`bw_${t}_set_${prop}`);
+    ids.push(`bw_${t}_get_${prop}`);
   }
   for (const m of Object.keys(def.methods ?? {})) ids.push(`bw_${t}_call_${m}`);
   return ids;
@@ -103,22 +104,26 @@ function defineFor(Blockly, JS, def) {
   }
 
   // ---- Properties: setter (statement) + getter (value) ----
+  // Read-only properties (editable: false, e.g. sensor readings) get a getter
+  // but no setter — you can read a location, not assign one.
   for (const [prop, spec] of Object.entries(def.properties ?? {})) {
-    const setId = `bw_${t}_set_${prop}`;
-    Blockly.Blocks[setId] = { init() {
-      this.appendValueInput("VALUE")
-        .appendField("set")
-        .appendField(instanceDropdown(Blockly, t), "INSTANCE")
-        .appendField(`.${prop} to`);
-      this.setPreviousStatement(true);
-      this.setNextStatement(true);
-      this.setColour(colour);
-    }};
-    JS.forBlock[setId] = (block, gen) => {
-      const inst = block.getFieldValue("INSTANCE");
-      const value = gen.valueToCode(block, "VALUE", gen.ORDER_NONE) || emptyValue(spec);
-      return `$bw.set(${q(inst)}, ${q(prop)}, ${value});\n`;
-    };
+    if (spec.editable !== false) {
+      const setId = `bw_${t}_set_${prop}`;
+      Blockly.Blocks[setId] = { init() {
+        this.appendValueInput("VALUE")
+          .appendField("set")
+          .appendField(instanceDropdown(Blockly, t), "INSTANCE")
+          .appendField(`.${prop} to`);
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        this.setColour(colour);
+      }};
+      JS.forBlock[setId] = (block, gen) => {
+        const inst = block.getFieldValue("INSTANCE");
+        const value = gen.valueToCode(block, "VALUE", gen.ORDER_NONE) || emptyValue(spec);
+        return `$bw.set(${q(inst)}, ${q(prop)}, ${value});\n`;
+      };
+    }
 
     const getId = `bw_${t}_get_${prop}`;
     Blockly.Blocks[getId] = { init() {

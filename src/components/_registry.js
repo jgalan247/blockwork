@@ -22,6 +22,9 @@ import { HorizontalArrangement } from "./HorizontalArrangement.js";
 import { VerticalArrangement } from "./VerticalArrangement.js";
 import { LocalStorage } from "./LocalStorage.js";
 import { Notifier } from "./Notifier.js";
+import { Geolocation } from "./Geolocation.js";
+import { Camera } from "./Camera.js";
+import { Accelerometer } from "./Accelerometer.js";
 // 👉 import new components here
 
 const DEFINITIONS = [
@@ -34,6 +37,9 @@ const DEFINITIONS = [
   VerticalArrangement,
   LocalStorage,
   Notifier,
+  Geolocation,
+  Camera,
+  Accelerometer,
   // 👉 add new components here
 ];
 
