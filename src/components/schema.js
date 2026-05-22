@@ -63,6 +63,7 @@
  */
 export const PROPERTY_TYPES = {
   string: { coerce: (v) => (v == null ? "" : String(v)) },
+  password: { coerce: (v) => (v == null ? "" : String(v)) }, // like string, but masked in the inspector
   color: { coerce: (v) => String(v) },
   boolean: { coerce: (v) => v === true || v === "true" },
   number: { coerce: (v) => { const n = Number(v); return Number.isFinite(n) ? n : 0; } },

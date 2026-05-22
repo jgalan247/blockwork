@@ -25,6 +25,7 @@ import { Notifier } from "./Notifier.js";
 import { Geolocation } from "./Geolocation.js";
 import { Camera } from "./Camera.js";
 import { Accelerometer } from "./Accelerometer.js";
+import { MqttClient } from "./MqttClient.js";
 // 👉 import new components here
 
 const DEFINITIONS = [
@@ -40,6 +41,7 @@ const DEFINITIONS = [
   Geolocation,
   Camera,
   Accelerometer,
+  MqttClient,
   // 👉 add new components here
 ];
 

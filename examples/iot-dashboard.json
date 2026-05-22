@@ -1,0 +1,66 @@
+{
+  "name": "IoT Dashboard",
+  "version": "1.0",
+  "createdWith": "Blockwork v0.1",
+  "screens": [
+    {
+      "name": "Screen1",
+      "properties": {
+        "BackgroundColor": "#0f172a",
+        "Title": "IoT Dashboard",
+        "ScrollableContent": true
+      },
+      "components": [
+        {
+          "id": "comp_1",
+          "name": "Label1",
+          "type": "Label",
+          "properties": {
+            "Text": "📡 IoT Dashboard",
+            "TextColor": "#f1f5f9",
+            "FontSize": 22,
+            "FontBold": true
+          }
+        },
+        {
+          "id": "comp_2",
+          "name": "Label2",
+          "type": "Label",
+          "properties": {
+            "Text": "Connecting…",
+            "TextColor": "#94a3b8",
+            "FontSize": 16,
+            "FontBold": false
+          }
+        },
+        {
+          "id": "comp_3",
+          "name": "Label3",
+          "type": "Label",
+          "properties": {
+            "Text": "Waiting for data on blockwork/demo/temp",
+            "TextColor": "#14b8a6",
+            "FontSize": 18,
+            "FontBold": false
+          }
+        },
+        {
+          "id": "comp_4",
+          "name": "MqttClient1",
+          "type": "MqttClient",
+          "properties": {
+            "BrokerUrl": "wss://test.mosquitto.org:8081",
+            "Username": "",
+            "Password": "",
+            "ClientId": "",
+            "LastTopic": "",
+            "LastMessage": "",
+            "IsConnected": false
+          }
+        }
+      ]
+    }
+  ],
+  "blocks": "<xml xmlns=\"https://developers.google.com/blockly/xml\"><block type=\"bw_MqttClient_event_Disconnected\" id=\"8;89(NmUD,z)VA]`)7^E\" x=\"29\" y=\"-29\"><field name=\"INSTANCE\">MqttClient1</field><statement name=\"DO\"><block type=\"bw_Label_set_Text\" id=\"is]Lt+X(s:.2f/sC3h%l\"><field name=\"INSTANCE\">Label2</field><value name=\"VALUE\"><block type=\"text\" id=\"QV~.IiopPrEWbB1%7AyJ\"><field name=\"TEXT\">Disconnected</field></block></value></block></statement></block><block type=\"bw_MqttClient_event_MessageReceived\" id=\"Hx(BfK,t!g7Bz!BnDZs9\" x=\"31\" y=\"-29\"><field name=\"INSTANCE\">MqttClient1</field><statement name=\"DO\"><block type=\"bw_Label_set_Text\" id=\"@NTZ8dOc_*+c4U;x^[C~\"><field name=\"INSTANCE\">Label3</field><value name=\"VALUE\"><block type=\"text_join\" id=\"eSgwt6b5=rx{Y7Qp^q3D\"><mutation items=\"2\"></mutation><value name=\"ADD0\"><block type=\"text_join\" id=\"1L23T0_YPnB@N+^nhJx;\"><mutation items=\"2\"></mutation><value name=\"ADD0\"><block type=\"bw_MqttClient_get_LastTopic\" id=\"-7zx!nFuBD03+$nn.e=(\"><field name=\"INSTANCE\">MqttClient1</field></block></value><value name=\"ADD1\"><block type=\"text\" id=\"N!toW~z4@aP%w.3BRJ2m\"><field name=\"TEXT\"> = </field></block></value></block></value><value name=\"ADD1\"><block type=\"bw_MqttClient_get_LastMessage\" id=\"0k:kRd{/L0U:aNbqRG^=\"><field name=\"INSTANCE\">MqttClient1</field></block></value></block></value></block></statement></block><block type=\"bw_MqttClient_call_Connect\" id=\"11,{*ujfklGYWyan($6|\" x=\"0\" y=\"0\"><field name=\"INSTANCE\">MqttClient1</field></block><block type=\"bw_MqttClient_event_MqttError\" id=\"(Ej?WY,[]cGj(c.*Gn[G\" x=\"0\" y=\"0\"><field name=\"INSTANCE\">MqttClient1</field><statement name=\"DO\"><block type=\"bw_Label_set_Text\" id=\"TlmO0/NFFMG,tW$hex-1\"><field name=\"INSTANCE\">Label2</field><value name=\"VALUE\"><block type=\"text\" id=\"xsrIpY@-b$8n=H`LCM4E\"><field name=\"TEXT\">Connection error — check the Broker URL</field></block></value></block></statement></block><block type=\"bw_MqttClient_event_Connected\" id=\"2f`]*je$[wn=d2|`UB]r\" x=\"59\" y=\"1\"><field name=\"INSTANCE\">MqttClient1</field><statement name=\"DO\"><block type=\"bw_Label_set_Text\" id=\")]UzGW7l-hr8srrJ@sXz\"><field name=\"INSTANCE\">Label2</field><value name=\"VALUE\"><block type=\"text\" id=\"r/;9([LRt+),hk`Y*W.N\"><field name=\"TEXT\">Connected ✓  (topic: blockwork/demo/temp)</field></block></value><next><block type=\"bw_MqttClient_call_Subscribe\" id=\"EupO@.{uihvenA/G6VR!\"><field name=\"INSTANCE\">MqttClient1</field><value name=\"ARG0\"><block type=\"text\" id=\")4=(%M#A$OeEV-|x[4ao\"><field name=\"TEXT\">blockwork/demo/temp</field></block></value></block></next></block></statement></block></xml>",
+  "assets": {}
+}

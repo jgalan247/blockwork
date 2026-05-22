@@ -119,6 +119,13 @@ function makeEditor(spec, value) {
       i.placeholder = "auto, fill, or pixels";
       return i;
     }
+    case "password": {
+      const i = document.createElement("input");
+      i.type = "password";
+      i.value = value ?? "";
+      i.placeholder = "(leave blank if none)";
+      return i;
+    }
     default: { // string
       const i = document.createElement("input");
       i.type = "text";

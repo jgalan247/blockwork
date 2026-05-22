@@ -102,10 +102,11 @@ vendor/                 jszip.min.js (Blockly loads from CDN by default)
 ## MVP scope
 
 **Components:** Screen, Button, Label, TextBox, Image, Horizontal/Vertical
-Arrangement, LocalStorage, Notifier, plus sensors (Geolocation, Camera,
-Accelerometer).
+Arrangement, LocalStorage, Notifier, sensors (Geolocation, Camera,
+Accelerometer), and **MqttClient** (live IoT data over MQTT-on-WebSockets —
+read sensors published by Python/paho, ESP32, etc., and build a dashboard).
 **Blocks:** Blockly standard categories + auto-generated per-component blocks.
-**Not yet:** networking, canvas, audio, multi-screen, accounts.
+**Not yet:** generic HTTP/fetch, charts/canvas, audio, multi-screen, accounts.
 
 ### Milestones
 

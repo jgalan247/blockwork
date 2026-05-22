@@ -23,7 +23,7 @@ const q = (s) => JSON.stringify(s);
 
 /** Blockly hue per palette category, so related blocks share a colour. */
 function categoryColour(category) {
-  return { UI: "230", Layout: "200", Storage: "160", Media: "20", Sensors: "30" }[category] ?? "120";
+  return { UI: "230", Layout: "200", Storage: "160", Media: "20", Sensors: "30", IoT: "180" }[category] ?? "120";
 }
 
 /** A sensible literal to use when a setter/argument input is left empty. */

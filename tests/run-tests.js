@@ -86,10 +86,23 @@ test("registry built without errors", () => {
   assert(registryErrors.length === 0, registryErrors.join(" | "));
 });
 test("registry indexes all components", () => {
-  eq(allComponents().length, 12); // 9 MVP + 3 sensors
+  eq(allComponents().length, 13); // 9 MVP + 3 sensors + MqttClient
   eq(visibleComponents().length, 7); // Screen, Button, Label, TextBox, Image, H, V
   assert(getComponent("Button") === Button, "getComponent returns Button");
   assert(components.has("Notifier") && components.has("LocalStorage"), "has non-visible components");
+});
+
+test("MqttClient: editable broker config + read-only readings + pub/sub methods", () => {
+  const m = getComponent("MqttClient");
+  assert(m && m.visible === false, "MqttClient is non-visible");
+  eq(m.properties.BrokerUrl.editable, true);
+  eq(m.properties.Password.type, "password");
+  eq(m.properties.LastMessage.editable, false); // getter-only
+  for (const name of ["Connect", "Subscribe", "Publish", "Disconnect"]) {
+    assert(typeof m.methods[name]?.run === "function", `has ${name}()`);
+  }
+  // "password" is a recognised property type
+  eq(coerce("password", 123), "123");
 });
 
 test("sensors are non-visible with read-only readings", () => {
