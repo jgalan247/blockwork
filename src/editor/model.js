@@ -85,6 +85,13 @@ export function findParentList(id) {
   return list;
 }
 
+/** The id of the container holding `id` (SCREEN/null = the screen root). */
+export function getParentId(id) {
+  let parentId = SCREEN;
+  walk((node, parent) => { if (node.id === id) parentId = parent === SCREEN ? SCREEN : parent.id; });
+  return parentId;
+}
+
 /* ------------------------------------------------------------------ */
 /* Mutations                                                          */
 /* ------------------------------------------------------------------ */

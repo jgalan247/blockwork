@@ -17,7 +17,7 @@ import {
 } from "../components/_registry.js";
 import {
   subscribe, getScreen, getSelectedId, select, addComponent, removeComponent,
-  findComponent,
+  findComponent, getParentId,
 } from "./model.js";
 import { devlog } from "./console.js";
 
@@ -78,13 +78,23 @@ function buildPalette() {
   }
 }
 
-/** Add a component into the selected container, or the screen if none applies. */
+/**
+ * Add a component where the user would expect, based on the current selection:
+ *   • a container selected  → add inside it
+ *   • a leaf selected       → add into the leaf's parent container (as a sibling),
+ *                             so repeated clicks keep filling the same arrangement
+ *   • nothing selected      → the screen root
+ */
 function addToSelectedContainer(type) {
   const sel = getSelectedId();
-  const inst = sel ? findComponent(sel) : null;
-  const intoContainer = inst && getComponent(inst.type).container ? sel : null;
+  let target = null; // screen root
+  if (sel) {
+    const inst = findComponent(sel);
+    if (inst && getComponent(inst.type).container) target = sel;
+    else if (inst) target = getParentId(sel);
+  }
   try {
-    addComponent(type, intoContainer);
+    addComponent(type, target);
     devlog.info(`Added ${type}.`);
   } catch (err) {
     devlog.error("Could not add component:", err.message);
