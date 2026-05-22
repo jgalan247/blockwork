@@ -86,8 +86,8 @@ test("registry built without errors", () => {
   assert(registryErrors.length === 0, registryErrors.join(" | "));
 });
 test("registry indexes all components", () => {
-  eq(allComponents().length, 13); // 9 MVP + 3 sensors + MqttClient
-  eq(visibleComponents().length, 7); // Screen, Button, Label, TextBox, Image, H, V
+  eq(allComponents().length, 17); // 9 MVP + 3 sensors + MqttClient + 4 widgets
+  eq(visibleComponents().length, 11); // 7 + Switch, Slider, Gauge, LineChart
   assert(getComponent("Button") === Button, "getComponent returns Button");
   assert(components.has("Notifier") && components.has("LocalStorage"), "has non-visible components");
 });
@@ -226,6 +226,38 @@ test("Notifier.ShowChoice dispatches ChoiceSelected", () => {
   eq(btns.length, 2, "one button per choice");
   btns[1].click();
   eq(chosen, "B");
+});
+
+/* ---- dashboard widgets ---- */
+test("Switch reads its On state and toggles", () => {
+  const Sw = getComponent("Switch");
+  const el = Sw.runtime.create("s", { ...defaultProps(Sw), On: true });
+  eq(Sw.runtime.read(el, "On"), true);
+  el.querySelector("input").checked = false;
+  eq(Sw.runtime.read(el, "On"), false);
+});
+test("Slider reads its numeric Value", () => {
+  const Sl = getComponent("Slider");
+  const el = Sl.runtime.create("s", { ...defaultProps(Sl), Min: 0, Max: 100, Value: 30 });
+  eq(Sl.runtime.read(el, "Value"), 30);
+});
+test("Gauge renders an SVG arc and re-renders on update", () => {
+  const G = getComponent("Gauge");
+  const el = G.runtime.create("g", { ...defaultProps(G), Value: 50, Max: 100, Color: "#123456" });
+  assert(el.innerHTML.includes("<svg"), "draws an svg");
+  assert(el.innerHTML.includes("#123456"), "uses the value-arc colour");
+  G.runtime.update(el, "Value", 0);
+  assert(el.innerHTML.includes("<svg"), "still an svg after update");
+});
+test("LineChart.AddPoint accumulates and caps at MaxPoints", () => {
+  const C = getComponent("LineChart");
+  const el = C.runtime.create("c", { ...defaultProps(C), MaxPoints: 3 });
+  for (const v of [1, 2, 3, 4, 5]) C.methods.AddPoint.run(el, [v]);
+  eq(el._points.length, 3);
+  eq(el._points[2], 5); // newest kept
+  assert(el.innerHTML.includes("polyline"), "draws a line once it has points");
+  C.methods.Clear.run(el, []);
+  eq(el._points.length, 0);
 });
 
 /* ---- report ---- */

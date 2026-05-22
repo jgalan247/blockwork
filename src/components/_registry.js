@@ -26,6 +26,10 @@ import { Geolocation } from "./Geolocation.js";
 import { Camera } from "./Camera.js";
 import { Accelerometer } from "./Accelerometer.js";
 import { MqttClient } from "./MqttClient.js";
+import { Switch } from "./Switch.js";
+import { Slider } from "./Slider.js";
+import { Gauge } from "./Gauge.js";
+import { LineChart } from "./LineChart.js";
 // 👉 import new components here
 
 const DEFINITIONS = [
@@ -42,6 +46,10 @@ const DEFINITIONS = [
   Camera,
   Accelerometer,
   MqttClient,
+  Switch,
+  Slider,
+  Gauge,
+  LineChart,
   // 👉 add new components here
 ];
 

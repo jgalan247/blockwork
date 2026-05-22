@@ -103,8 +103,9 @@ vendor/                 jszip.min.js (Blockly loads from CDN by default)
 
 **Components:** Screen, Button, Label, TextBox, Image, Horizontal/Vertical
 Arrangement, LocalStorage, Notifier, sensors (Geolocation, Camera,
-Accelerometer), and **MqttClient** (live IoT data over MQTT-on-WebSockets —
-read sensors published by Python/paho, ESP32, etc., and build a dashboard).
+Accelerometer), **MqttClient** (live IoT data over MQTT-on-WebSockets — read
+sensors published by Python/paho, ESP32, etc.), and dashboard widgets
+(**Switch**, **Slider**, **Gauge**, **LineChart**).
 **Blocks:** Blockly standard categories + auto-generated per-component blocks.
 **Not yet:** generic HTTP/fetch, charts/canvas, audio, multi-screen, accounts.
 

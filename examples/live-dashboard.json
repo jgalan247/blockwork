@@ -1,0 +1,62 @@
+{
+  "name": "Live Dashboard",
+  "version": "1.0",
+  "createdWith": "Blockwork v0.1",
+  "screens": [
+    {
+      "name": "Screen1",
+      "properties": {
+        "BackgroundColor": "#ffffff",
+        "Title": "Live Dashboard",
+        "ScrollableContent": true
+      },
+      "components": [
+        {
+          "id": "comp_1",
+          "name": "Label1",
+          "type": "Label",
+          "properties": {
+            "Text": "Drag the slider 👇",
+            "TextColor": "#111827",
+            "FontSize": 18,
+            "FontBold": true
+          }
+        },
+        {
+          "id": "comp_2",
+          "name": "Slider1",
+          "type": "Slider",
+          "properties": {
+            "Min": 0,
+            "Max": 100,
+            "Value": 20,
+            "Color": "#2563eb"
+          }
+        },
+        {
+          "id": "comp_3",
+          "name": "Gauge1",
+          "type": "Gauge",
+          "properties": {
+            "Value": 0,
+            "Min": 0,
+            "Max": 100,
+            "Label": "Level",
+            "Color": "#14b8a6"
+          }
+        },
+        {
+          "id": "comp_4",
+          "name": "LineChart1",
+          "type": "LineChart",
+          "properties": {
+            "Color": "#6366f1",
+            "MaxPoints": 30
+          }
+        }
+      ]
+    }
+  ],
+  "blocks": "<xml xmlns=\"https://developers.google.com/blockly/xml\"><block type=\"bw_Slider_event_ValueChanged\" id=\"+1JsGMDy!-2VrJ4n+G*z\" x=\"0\" y=\"0\"><field name=\"INSTANCE\">Slider1</field><statement name=\"DO\"><block type=\"bw_Gauge_set_Value\" id=\"X6`bi?:iLS-s?Mtzp}-a\"><field name=\"INSTANCE\">Gauge1</field><value name=\"VALUE\"><block type=\"bw_Slider_get_Value\" id=\"R8LvG_#H~z^@9r#w/2VS\"><field name=\"INSTANCE\">Slider1</field></block></value><next><block type=\"bw_LineChart_call_AddPoint\" id=\"5L`-Gr=zsJO:)]mouy,T\"><field name=\"INSTANCE\">LineChart1</field><value name=\"ARG0\"><block type=\"bw_Slider_get_Value\" id=\"iwp~S=cB1(rC:9=!Cbig\"><field name=\"INSTANCE\">Slider1</field></block></value></block></next></block></statement></block></xml>",
+  "assets": {}
+}
