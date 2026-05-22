@@ -1,4 +1,5 @@
 [
   { "name": "Guess the Number", "file": "guess-the-number.json", "description": "Random number game — variables, conditionals, random." },
-  { "name": "Shopping List", "file": "shopping-list.json", "description": "Add/clear items that persist — text, LocalStorage." }
+  { "name": "Shopping List", "file": "shopping-list.json", "description": "Add/clear items that persist — text, LocalStorage." },
+  { "name": "Where Am I?", "file": "where-am-i.json", "description": "Show your location on tap — Geolocation sensor." }
 ]

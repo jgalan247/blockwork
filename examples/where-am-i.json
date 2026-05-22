@@ -1,0 +1,64 @@
+{
+  "name": "Where Am I?",
+  "version": "1.0",
+  "createdWith": "Blockwork v0.1",
+  "screens": [
+    {
+      "name": "Screen1",
+      "properties": {
+        "BackgroundColor": "#ecfeff",
+        "Title": "Where Am I?",
+        "ScrollableContent": true
+      },
+      "components": [
+        {
+          "id": "comp_1",
+          "name": "Label1",
+          "type": "Label",
+          "properties": {
+            "Text": "📍 Where am I?",
+            "TextColor": "#111827",
+            "FontSize": 20,
+            "FontBold": true
+          }
+        },
+        {
+          "id": "comp_2",
+          "name": "Button1",
+          "type": "Button",
+          "properties": {
+            "Text": "Find me",
+            "BackgroundColor": "#0891b2",
+            "TextColor": "#ffffff",
+            "Enabled": true,
+            "Width": "auto",
+            "Height": "auto"
+          }
+        },
+        {
+          "id": "comp_3",
+          "name": "Label2",
+          "type": "Label",
+          "properties": {
+            "Text": "Press \"Find me\" to see your location.",
+            "TextColor": "#111827",
+            "FontSize": 16,
+            "FontBold": false
+          }
+        },
+        {
+          "id": "comp_4",
+          "name": "Geolocation1",
+          "type": "Geolocation",
+          "properties": {
+            "Latitude": 0,
+            "Longitude": 0,
+            "Accuracy": 0
+          }
+        }
+      ]
+    }
+  ],
+  "blocks": "<xml xmlns=\"https://developers.google.com/blockly/xml\"><block type=\"bw_Geolocation_event_LocationChanged\" id=\"|{3^ZAMrYdIH*dw-aO~D\" x=\"31\" y=\"-34\"><field name=\"INSTANCE\">Geolocation1</field><statement name=\"DO\"><block type=\"bw_Label_set_Text\" id=\"X:*!4#r;]+(x;kybL7oh\"><field name=\"INSTANCE\">Label2</field><value name=\"VALUE\"><block type=\"text_join\" id=\"Y)!#9~0NaG^OJC/33]NP\"><mutation items=\"2\"></mutation><value name=\"ADD0\"><block type=\"text_join\" id=\"-!sd]GFmJy!3{+_7EV5!\"><mutation items=\"2\"></mutation><value name=\"ADD0\"><block type=\"text_join\" id=\"!EkOknx?YeUp8+;G!601\"><mutation items=\"2\"></mutation><value name=\"ADD0\"><block type=\"text\" id=\"a~o%#CYF~v_E+wF~!-/Z\"><field name=\"TEXT\">Latitude: </field></block></value><value name=\"ADD1\"><block type=\"bw_Geolocation_get_Latitude\" id=\"=6(FSJH9iJ;Rn2T[`?pz\"><field name=\"INSTANCE\">Geolocation1</field></block></value></block></value><value name=\"ADD1\"><block type=\"text\" id=\"7ol9(JQCl;a+8iZzP$/Z\"><field name=\"TEXT\">\nLongitude: </field></block></value></block></value><value name=\"ADD1\"><block type=\"bw_Geolocation_get_Longitude\" id=\"30mP7yDVaK{N:a7IufEW\"><field name=\"INSTANCE\">Geolocation1</field></block></value></block></statement></block><block type=\"bw_Button_event_Click\" id=\"zcJp[R8N`K7WD?g+)owm\" x=\"32\" y=\"-33\"><field name=\"INSTANCE\">Button1</field><statement name=\"DO\"><block type=\"bw_Geolocation_call_RequestLocation\" id=\"({$39ye_Qi`gvak3/NK=\"><field name=\"INSTANCE\">Geolocation1</field></block></statement></block><block type=\"bw_Geolocation_event_LocationError\" id=\"G(@i0bw,/tn+)|K18vrh\" x=\"0\" y=\"0\"><field name=\"INSTANCE\">Geolocation1</field><statement name=\"DO\"><block type=\"bw_Label_set_Text\" id=\"hE.[R{`uu:n{mEC-U?)r\"><field name=\"INSTANCE\">Label2</field><value name=\"VALUE\"><block type=\"text\" id=\"S%nn^,n.ndzd#-{5alAE\"><field name=\"TEXT\">Could not get your location. Please allow location access and try again.</field></block></value></block></statement></block></xml>",
+  "assets": {}
+}
