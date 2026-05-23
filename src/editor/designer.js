@@ -223,7 +223,8 @@ function appendTreeNodes(instance, depth) {
 function treeItem(label, id, depth, selected) {
   const li = document.createElement("li");
   li.textContent = label;
-  li.className = `depth-${Math.min(depth, 2)}`;
+  // Indent by nesting depth (any depth, not just two levels).
+  li.style.paddingLeft = `calc(var(--space-2) + ${depth} * var(--space-4))`;
   li.setAttribute("role", "treeitem");
   li.setAttribute("aria-selected", String(selected));
   li.tabIndex = 0;
