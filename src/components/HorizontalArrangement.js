@@ -17,10 +17,11 @@ import { applyDimension, fillClass, sizeStyle } from "./schema.js";
 const H = { Left: "flex-start", Center: "center", Right: "flex-end" };
 const V = { Top: "flex-start", Center: "center", Bottom: "flex-end" };
 
-// Flex/alignment only — width/height are applied separately (they may be "fill").
+// Alignment only — width/height are applied separately (they may be "fill").
+// The element is a CSS grid (see components.css): justify-content positions the
+// columns (AlignHorizontal), align-items positions items in their row (AlignVertical).
 function alignStyle(p) {
-  return `flex-direction:row;` +
-    `justify-content:${H[p.AlignHorizontal] || "flex-start"};` +
+  return `justify-content:${H[p.AlignHorizontal] || "flex-start"};` +
     `align-items:${V[p.AlignVertical] || "flex-start"};`;
 }
 
@@ -39,7 +40,7 @@ export const HorizontalArrangement = {
   icon: "↔️",
   visible: true,
   container: true,
-  help: "Arranges the components inside it in a row. Set Width to \"fill\" so AlignHorizontal can position them.",
+  help: "Arranges components in a row (up to 3, then wraps). AlignHorizontal positions them; set children to Width = fill for equal columns.",
 
   properties: {
     AlignHorizontal: { type: "enum", default: "Left", editable: true, options: ["Left", "Center", "Right"] },

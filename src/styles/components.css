@@ -30,11 +30,11 @@
 
 /*
  * Resolve a "fill" dimension based on the parent's direction:
- *   • in a row    → fill width SHARES the row (equal columns); fill height stretches
+ *   • in a row    → fill width makes the 3 columns equal (see grid below)
  *   • in a column → fill height SHARES; fill width stretches to full width
  * min-width/min-height: 0 lets shared items shrink instead of overflowing.
  */
-.bw-harrange > .bw-fill-w { flex: 1 1 0; min-width: 0; }
+.bw-harrange > .bw-fill-w { justify-self: stretch; min-width: 0; }
 .bw-harrange > .bw-fill-h { align-self: stretch; height: auto; }
 .bw-varrange > .bw-fill-h,
 .bw-screen   > .bw-fill-h { flex: 1 1 0; min-height: 0; }
@@ -79,11 +79,25 @@
 }
 
 /* Arrangements (layout containers) */
-.bw-arrange { display: flex; gap: 6px; margin: 4px 0; min-height: 24px; max-width: 100%; box-sizing: border-box; }
-/* A row wider than the screen scrolls inside itself instead of overflowing it,
-   so every child stays reachable and nothing bleeds past the phone frame. */
-.bw-harrange { flex-direction: row; overflow-x: auto; }
-.bw-varrange { flex-direction: column; }
+.bw-arrange { gap: 6px; margin: 4px 0; min-height: 24px; max-width: 100%; box-sizing: border-box; }
+
+/*
+ * Horizontal: a grid of up to 3 columns. Children flow left-to-right and wrap
+ * to a new row after 3, so a row never overflows the phone. The block responds
+ * to AlignHorizontal (justify-content) and AlignVertical (align-items), set
+ * inline by the component. Columns are content-sized by default; if any child
+ * is set to Width = fill, the 3 columns become equal instead.
+ */
+.bw-harrange {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: start;
+  align-items: start;
+}
+.bw-harrange:has(> .bw-fill-w) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+/* Vertical stays a flex column. */
+.bw-varrange { display: flex; flex-direction: column; }
 
 /* Notifier overlays (alert / choice / toast) */
 .bw-notify-overlay {
