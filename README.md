@@ -131,3 +131,9 @@ for export. No framework, no TypeScript, no required bundler.
 ## License
 
 [MIT](LICENSE) © 2026 Blockwork contributors.
+
+Third-party components (Blockly, MQTT.js, JSZip) are used under their own
+licenses — see [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+
+Blockwork is **not affiliated with or endorsed by** MIT, MIT App Inventor, or
+Google; "App Inventor" is referenced only descriptively.
