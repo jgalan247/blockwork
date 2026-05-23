@@ -132,6 +132,36 @@ export function removeComponent(id) {
   notify("tree");
 }
 
+// Component names must be valid identifiers (used in blocks and generated code).
+const NAME_RE = /^[A-Za-z_][A-Za-z0-9_]*$/;
+
+/** Is `name` already used by a component (other than `exceptId`)? */
+export function nameExists(name, exceptId) {
+  let found = false;
+  walk((node) => { if (node.name === name && node.id !== exceptId) found = true; });
+  return found;
+}
+
+/**
+ * Rename a component. Returns { ok: true, oldName, name } on success, or
+ * { ok: false, error } if the name is invalid or already taken. The caller is
+ * responsible for updating any blocks that referenced the old name.
+ */
+export function renameComponent(id, rawName) {
+  const target = findComponent(id);
+  if (!target) return { ok: false, error: "no such component" };
+  const name = String(rawName).trim();
+  if (name === target.name) return { ok: true, oldName: name, name };
+  if (!NAME_RE.test(name)) {
+    return { ok: false, error: "Names use letters, digits and _ , and can't start with a digit." };
+  }
+  if (nameExists(name, id)) return { ok: false, error: `"${name}" is already used.` };
+  const oldName = target.name;
+  target.name = name;
+  notify("tree");
+  return { ok: true, oldName, name };
+}
+
 /** Set one property on the selected target (screen when id is null). */
 export function setProperty(id, prop, value) {
   const target = id === SCREEN ? getScreen() : findComponent(id);
@@ -181,5 +211,8 @@ function nextName(type) {
     const m = /(\d+)$/.exec(node.name);
     if (m) max = Math.max(max, Number(m[1]));
   });
-  return `${type}${max + 1}`;
+  // Skip any names already taken (e.g. after a manual rename) to stay unique.
+  let name;
+  do { name = `${type}${++max}`; } while (nameExists(name));
+  return name;
 }

@@ -93,6 +93,29 @@ export function clearBlocks() {
   if (workspace) workspace.clear();
 }
 
+/**
+ * Update existing blocks after a component is renamed: every INSTANCE dropdown
+ * pointing at the old name is repointed to the new one. Call AFTER the model has
+ * the new name.
+ *
+ * We round-trip the blocks through XML rather than calling field.setValue: the
+ * instance dropdowns are *dynamic* and cache their options when the block is
+ * created, so setValue to a freshly-created name gets rejected as "not an
+ * option". Reloading from XML rebuilds the dropdowns with current options.
+ */
+export function renameInstance(oldName, newName) {
+  if (!workspace || oldName === newName) return;
+  const Blockly = window.Blockly;
+  const dom = Blockly.Xml.workspaceToDom(workspace);
+  let changed = false;
+  for (const field of dom.querySelectorAll('field[name="INSTANCE"]')) {
+    if (field.textContent === oldName) { field.textContent = newName; changed = true; }
+  }
+  if (!changed) return;
+  workspace.clear();
+  Blockly.Xml.domToWorkspace(dom, workspace);
+}
+
 /* ------------------------------------------------------------------ */
 /* Toolbox                                                            */
 /* ------------------------------------------------------------------ */

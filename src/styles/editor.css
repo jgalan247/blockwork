@@ -231,6 +231,13 @@ html, body {
 /* Properties inspector */
 .inspector-head { padding: var(--space-2); display: flex; align-items: center; gap: var(--space-2); }
 .inspector-head .name { font-weight: 600; }
+.inspector-head .name-input {
+  font: inherit; font-weight: 600; flex: 1 1 auto; min-width: 4ch;
+  background: transparent; color: var(--color-text);
+  border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+  padding: 2px 6px;
+}
+.inspector-head .name-input:focus { border-color: var(--color-accent); background: var(--color-bg); }
 .inspector-head .type { color: var(--color-muted); font-size: 0.8rem; }
 .inspector-head .btn { margin-left: auto; padding: var(--space-1) var(--space-2); }
 .inspector-empty { padding: var(--space-3) var(--space-2); color: var(--color-muted); }

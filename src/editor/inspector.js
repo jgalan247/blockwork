@@ -12,7 +12,9 @@
 
 import { coerce } from "../components/schema.js";
 import { getComponent } from "../components/_registry.js";
-import { subscribe, getSelected, getSelectedId, setProperty, removeComponent } from "./model.js";
+import { subscribe, getSelected, getSelectedId, setProperty, removeComponent, renameComponent } from "./model.js";
+import { renameInstance } from "./workspace.js";
+import { devlog } from "./console.js";
 
 let el;
 
@@ -35,8 +37,35 @@ function render() {
   // Header: name + type (+ delete, except for the screen).
   const head = document.createElement("div");
   head.className = "inspector-head";
-  head.innerHTML = `<span class="name">${target.name}</span><span class="type">${def.name}</span>`;
-  if (id !== null) {
+
+  if (id === null) {
+    // The screen's name isn't renamable in the MVP.
+    head.innerHTML = `<span class="name">${target.name}</span><span class="type">${def.name}</span>`;
+  } else {
+    // Editable name — renaming makes blocks easier to read. Commits on blur/Enter
+    // and updates any blocks that referenced the old name.
+    const nameInput = document.createElement("input");
+    nameInput.className = "name-input";
+    nameInput.value = target.name;
+    nameInput.setAttribute("aria-label", "Component name");
+    nameInput.title = "Rename this component";
+    nameInput.addEventListener("change", () => {
+      const res = renameComponent(id, nameInput.value);
+      if (res.ok) {
+        renameInstance(res.oldName, res.name);
+        if (res.oldName !== res.name) devlog.info(`Renamed ${res.oldName} → ${res.name}.`);
+      } else {
+        devlog.warn(`Rename: ${res.error}`);
+        nameInput.value = target.name; // revert
+      }
+    });
+    nameInput.addEventListener("keydown", (e) => { if (e.key === "Enter") nameInput.blur(); });
+
+    const type = document.createElement("span");
+    type.className = "type";
+    type.textContent = def.name;
+    head.append(nameInput, type);
+
     const del = document.createElement("button");
     del.className = "btn btn-danger";
     del.type = "button";
