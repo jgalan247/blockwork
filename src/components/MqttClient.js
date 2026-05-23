@@ -63,6 +63,19 @@ export const MqttClient = {
     Connect: {
       params: [],
       run: async (_el, _args, ctx) => {
+        // The live Preview runs in a sandboxed iframe with an opaque ("null")
+        // origin, and browsers block WebSockets there — so MQTT can only connect
+        // in the exported app (a real origin). Fail fast with a clear reason
+        // instead of silently flapping "Disconnected".
+        if (window.location.origin === "null") {
+          console.warn(
+            "MQTT can't connect inside the sandboxed Preview (no network origin). " +
+            "Use Export PWA and open the app to connect to the broker."
+          );
+          ctx.dispatch("MqttError");
+          return;
+        }
+
         let mqtt;
         try { mqtt = await loadMqtt(); }
         catch (err) { console.warn(err.message); ctx.dispatch("MqttError"); return; }
