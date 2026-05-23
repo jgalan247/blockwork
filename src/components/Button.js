@@ -6,7 +6,7 @@
  * the contract, then read this top to bottom.
  */
 
-import { dimensionToCss, escapeHtml } from "./schema.js";
+import { applyDimension, fillClass, sizeStyle, escapeHtml } from "./schema.js";
 
 // Applying a single property is shared between create() and update() so the
 // preview, the runtime, and live edits all behave identically. This is the most
@@ -17,8 +17,8 @@ function applyProp(el, prop, value) {
     case "BackgroundColor": el.style.background = value; break;
     case "TextColor": el.style.color = value; break;
     case "Enabled": el.disabled = !value; break;
-    case "Width": el.style.width = dimensionToCss(value); break;
-    case "Height": el.style.height = dimensionToCss(value); break;
+    case "Width": applyDimension(el, "width", value); break;
+    case "Height": applyDimension(el, "height", value); break;
   }
 }
 
@@ -50,10 +50,9 @@ export const Button = {
   designer: {
     defaultSize: { width: 120, height: 40 },
     render: (p) => {
-      const style = `background:${p.BackgroundColor};color:${p.TextColor};` +
-        `width:${dimensionToCss(p.Width)};height:${dimensionToCss(p.Height)}`;
+      const style = `background:${p.BackgroundColor};color:${p.TextColor};${sizeStyle(p)}`;
       const disabled = p.Enabled ? "" : " disabled";
-      return `<button class="bw-button" style="${style}"${disabled}>${escapeHtml(p.Text)}</button>`;
+      return `<button class="bw-button${fillClass(p)}" style="${style}"${disabled}>${escapeHtml(p.Text)}</button>`;
     },
   },
 

@@ -94,6 +94,40 @@ export function coerce(type, value) {
   return (PROPERTY_TYPES[type] ?? PROPERTY_TYPES.string).coerce(value);
 }
 
+/*
+ * "fill" means different things depending on the parent: in a row it should
+ * SHARE the width equally (flexbox), in a column/screen it should STRETCH to
+ * full width. We can't know the parent here, so a "fill" dimension is expressed
+ * as a CSS class (bw-fill-w / bw-fill-h) and components.css resolves it per
+ * parent direction. Fixed/auto dimensions stay inline.
+ */
+
+/** Apply a (possibly "fill") width/height to a live element. axis: "width"|"height". */
+export function applyDimension(el, axis, value) {
+  const cls = axis === "width" ? "bw-fill-w" : "bw-fill-h";
+  if (normalizeDimension(value) === "fill") {
+    el.classList.add(cls);
+    el.style[axis] = "";
+  } else {
+    el.classList.remove(cls);
+    el.style[axis] = dimensionToCss(value);
+  }
+}
+
+/** Designer-render helper: class names for any "fill" dimensions in props. */
+export function fillClass(p) {
+  return (normalizeDimension(p.Width) === "fill" ? " bw-fill-w" : "") +
+    (normalizeDimension(p.Height) === "fill" ? " bw-fill-h" : "");
+}
+
+/** Designer-render helper: inline width/height CSS, skipping "fill" (handled by class). */
+export function sizeStyle(p) {
+  let s = "";
+  if ("Width" in p && normalizeDimension(p.Width) !== "fill") s += `width:${dimensionToCss(p.Width)};`;
+  if ("Height" in p && normalizeDimension(p.Height) !== "fill") s += `height:${dimensionToCss(p.Height)};`;
+  return s;
+}
+
 /** Escape text so user-supplied strings can't break designer HTML. */
 export function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, (c) => (

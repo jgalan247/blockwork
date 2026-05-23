@@ -22,7 +22,24 @@
   font-size: 16px;
   color: #111827;
   overflow-x: hidden; /* never bleed sideways past the phone frame */
+  /* A column, so children can fill the screen height (Height = fill). */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
+
+/*
+ * Resolve a "fill" dimension based on the parent's direction:
+ *   • in a row    → fill width SHARES the row (equal columns); fill height stretches
+ *   • in a column → fill height SHARES; fill width stretches to full width
+ * min-width/min-height: 0 lets shared items shrink instead of overflowing.
+ */
+.bw-harrange > .bw-fill-w { flex: 1 1 0; min-width: 0; }
+.bw-harrange > .bw-fill-h { align-self: stretch; height: auto; }
+.bw-varrange > .bw-fill-h,
+.bw-screen   > .bw-fill-h { flex: 1 1 0; min-height: 0; }
+.bw-varrange > .bw-fill-w,
+.bw-screen   > .bw-fill-w { width: 100%; align-self: stretch; }
 /* The screen is the single vertical scroll container; horizontal is clipped. */
 .bw-screen[data-scrollable="false"] { overflow-y: hidden; }
 .bw-screen[data-scrollable="true"] { overflow-y: auto; }

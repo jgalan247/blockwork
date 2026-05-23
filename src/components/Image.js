@@ -2,14 +2,14 @@
  * Image — shows a picture from a URL or a data URL.
  */
 
-import { dimensionToCss, escapeHtml } from "./schema.js";
+import { applyDimension, fillClass, sizeStyle, escapeHtml } from "./schema.js";
 
 function applyProp(el, prop, value) {
   switch (prop) {
     case "Source": if (value) el.src = value; else el.removeAttribute("src"); break;
     case "Alt": el.alt = value; break;
-    case "Width": el.style.width = dimensionToCss(value); break;
-    case "Height": el.style.height = dimensionToCss(value); break;
+    case "Width": applyDimension(el, "width", value); break;
+    case "Height": applyDimension(el, "height", value); break;
   }
 }
 
@@ -33,11 +33,11 @@ export const Image = {
   designer: {
     defaultSize: { width: 120, height: 120 },
     render: (p) => {
-      const style = `width:${dimensionToCss(p.Width)};height:${dimensionToCss(p.Height)}`;
+      const style = sizeStyle(p);
       if (!p.Source) {
-        return `<div class="bw-image bw-image-empty" style="${style}">🖼️ Image</div>`;
+        return `<div class="bw-image bw-image-empty${fillClass(p)}" style="${style}">🖼️ Image</div>`;
       }
-      return `<img class="bw-image" src="${escapeHtml(p.Source)}" alt="${escapeHtml(p.Alt)}" style="${style}">`;
+      return `<img class="bw-image${fillClass(p)}" src="${escapeHtml(p.Source)}" alt="${escapeHtml(p.Alt)}" style="${style}">`;
     },
   },
 

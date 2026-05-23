@@ -14,6 +14,7 @@ function applyProp(el, prop, value) {
   switch (prop) {
     case "Text": if (el.value !== value) el.value = value; break;
     case "Hint": el.placeholder = value; break;
+    case "TextAlign": el.style.textAlign = String(value).toLowerCase(); break;
     // MultiLine decides the element type and is handled in create().
   }
 }
@@ -29,6 +30,7 @@ export const TextBox = {
     Hint: { type: "string", default: "Enter text…", editable: true },
     Text: { type: "string", default: "", editable: true },
     MultiLine: { type: "boolean", default: false, editable: true },
+    TextAlign: { type: "enum", default: "Left", editable: true, options: ["Left", "Center", "Right"] },
   },
 
   events: {
@@ -41,9 +43,10 @@ export const TextBox = {
     render: (p) => {
       const hint = escapeHtml(p.Hint);
       const text = escapeHtml(p.Text);
+      const style = `text-align:${String(p.TextAlign).toLowerCase()}`;
       return p.MultiLine
-        ? `<textarea class="bw-textbox" placeholder="${hint}" rows="3">${text}</textarea>`
-        : `<input class="bw-textbox" type="text" placeholder="${hint}" value="${text}">`;
+        ? `<textarea class="bw-textbox" placeholder="${hint}" rows="3" style="${style}">${text}</textarea>`
+        : `<input class="bw-textbox" type="text" placeholder="${hint}" value="${text}" style="${style}">`;
     },
   },
 
@@ -56,6 +59,7 @@ export const TextBox = {
       el.className = "bw-textbox";
       applyProp(el, "Hint", props.Hint);
       applyProp(el, "Text", props.Text);
+      applyProp(el, "TextAlign", props.TextAlign);
       return el;
     },
     update: applyProp,

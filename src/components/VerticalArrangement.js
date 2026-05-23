@@ -10,24 +10,24 @@
  * Width/Height accept "auto", "fill", or a number of pixels.
  */
 
-import { dimensionToCss } from "./schema.js";
+import { applyDimension, fillClass, sizeStyle } from "./schema.js";
 
 const H = { Left: "flex-start", Center: "center", Right: "flex-end" };
 const V = { Top: "flex-start", Center: "center", Bottom: "flex-end" };
 
-function styleFor(p) {
+// Flex/alignment only — width/height are applied separately (they may be "fill").
+function alignStyle(p) {
   return `flex-direction:column;` +
     `justify-content:${V[p.AlignVertical] || "flex-start"};` +
-    `align-items:${H[p.AlignHorizontal] || "flex-start"};` +
-    `width:${dimensionToCss(p.Width)};height:${dimensionToCss(p.Height)}`;
+    `align-items:${H[p.AlignHorizontal] || "flex-start"};`;
 }
 
 function applyProp(el, prop, value) {
   switch (prop) {
     case "AlignVertical": el.style.justifyContent = V[value] || "flex-start"; break;
     case "AlignHorizontal": el.style.alignItems = H[value] || "flex-start"; break;
-    case "Width": el.style.width = dimensionToCss(value); break;
-    case "Height": el.style.height = dimensionToCss(value); break;
+    case "Width": applyDimension(el, "width", value); break;
+    case "Height": applyDimension(el, "height", value); break;
   }
 }
 
@@ -51,14 +51,16 @@ export const VerticalArrangement = {
 
   designer: {
     defaultSize: { width: 160, height: 160 },
-    render: (p) => `<div class="bw-arrange bw-varrange" style="${styleFor(p)}" data-bw-slot></div>`,
+    render: (p) => `<div class="bw-arrange bw-varrange${fillClass(p)}" style="${alignStyle(p)}${sizeStyle(p)}" data-bw-slot></div>`,
   },
 
   runtime: {
     create(id, props) {
       const el = document.createElement("div");
       el.className = "bw-arrange bw-varrange";
-      el.style.cssText = styleFor(props);
+      el.style.cssText = alignStyle(props);
+      applyDimension(el, "width", props.Width);
+      applyDimension(el, "height", props.Height);
       return el;
     },
     update(el, prop, value) { applyProp(el, prop, value); },

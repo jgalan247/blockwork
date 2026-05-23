@@ -12,24 +12,24 @@
  * "fill", or a number of pixels.
  */
 
-import { dimensionToCss } from "./schema.js";
+import { applyDimension, fillClass, sizeStyle } from "./schema.js";
 
 const H = { Left: "flex-start", Center: "center", Right: "flex-end" };
 const V = { Top: "flex-start", Center: "center", Bottom: "flex-end" };
 
-function styleFor(p) {
+// Flex/alignment only — width/height are applied separately (they may be "fill").
+function alignStyle(p) {
   return `flex-direction:row;` +
     `justify-content:${H[p.AlignHorizontal] || "flex-start"};` +
-    `align-items:${V[p.AlignVertical] || "flex-start"};` +
-    `width:${dimensionToCss(p.Width)};height:${dimensionToCss(p.Height)}`;
+    `align-items:${V[p.AlignVertical] || "flex-start"};`;
 }
 
 function applyProp(el, prop, value) {
   switch (prop) {
     case "AlignHorizontal": el.style.justifyContent = H[value] || "flex-start"; break;
     case "AlignVertical": el.style.alignItems = V[value] || "flex-start"; break;
-    case "Width": el.style.width = dimensionToCss(value); break;
-    case "Height": el.style.height = dimensionToCss(value); break;
+    case "Width": applyDimension(el, "width", value); break;
+    case "Height": applyDimension(el, "height", value); break;
   }
 }
 
@@ -53,14 +53,16 @@ export const HorizontalArrangement = {
 
   designer: {
     defaultSize: { width: 200, height: 80 },
-    render: (p) => `<div class="bw-arrange bw-harrange" style="${styleFor(p)}" data-bw-slot></div>`,
+    render: (p) => `<div class="bw-arrange bw-harrange${fillClass(p)}" style="${alignStyle(p)}${sizeStyle(p)}" data-bw-slot></div>`,
   },
 
   runtime: {
     create(id, props) {
       const el = document.createElement("div");
       el.className = "bw-arrange bw-harrange";
-      el.style.cssText = styleFor(props);
+      el.style.cssText = alignStyle(props);
+      applyDimension(el, "width", props.Width);
+      applyDimension(el, "height", props.Height);
       return el;
     },
     update(el, prop, value) { applyProp(el, prop, value); },
