@@ -72,7 +72,9 @@ export const MqttClient = {
             "MQTT can't connect inside the sandboxed Preview (no network origin). " +
             "Use Export PWA and open the app to connect to the broker."
           );
-          ctx.dispatch("MqttError");
+          // Defer so a `when MqttError` handler registered later in the same
+          // startup run (block order) is in place to receive it.
+          setTimeout(() => ctx.dispatch("MqttError"), 0);
           return;
         }
 

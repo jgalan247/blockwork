@@ -308,6 +308,21 @@ html, body {
   background: #fff;
 }
 
+/* Amber heads-up shown when the project uses network/sensor components that
+   can't run in the sandboxed preview (they work in the exported app). */
+.preview-note {
+  max-width: 340px;
+  margin-bottom: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: rgb(180 83 9 / 0.18);
+  border: 1px solid #b45309;
+  border-radius: var(--radius-sm);
+  color: #fbbf24;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+.preview-note[hidden] { display: none; }
+
 .visually-hidden {
   position: absolute; width: 1px; height: 1px;
   padding: 0; margin: -1px; overflow: hidden;
